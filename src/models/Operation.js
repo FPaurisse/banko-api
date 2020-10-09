@@ -5,7 +5,9 @@ const Schema = mongoose.Schema;
 const operationSchema = new Schema({
     title: { type: String, required: true },
     amount: { type: String, required: true },
-    date: { type: String, required: true }
+    date: { type: String, required: true },
+    isPassed: { type: Boolean, required: true },
+    isCredit: { type: Boolean, required: true }
 });
 
 const Operation = mongoose.model('Operation', operationSchema);

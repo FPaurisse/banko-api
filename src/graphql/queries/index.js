@@ -1,4 +1,4 @@
-const { GraphQLList, GraphQLObjectType } = require('graphql');
+const { GraphQLList, GraphQLObjectType, GraphQLString } = require('graphql');
 const Operation = require('../../models/Operation')
 const OperationType = require('./OperationType')
 
@@ -7,9 +7,13 @@ const QueryRootType = new GraphQLObjectType ({
     fields: () => ({
         operations: {
             type: new GraphQLList(OperationType),
-            resolve: async function () {
-              return await  Operation.find({}, (err, auth) => {
-              });
+            args: {
+                month: {type: GraphQLString},
+                year: {type: GraphQLString}
+            },
+            resolve: async (_, { month, year }) => {
+                const operations = await Operation.find({ date: { "$regex": `${year}-${month}` } }).sort({'date': -1})
+                return operations;
             }
         },
     })

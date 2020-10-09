@@ -1,4 +1,4 @@
-const {GraphQLNonNull, GraphQLString} = require('graphql');
+const {GraphQLNonNull, GraphQLString, GraphQLBoolean} = require('graphql');
 const OperationType = require('../queries/OperationType');
 const Operation = require('../../models/Operation')
 
@@ -16,6 +16,14 @@ const addOperation = {
         date: {
             name: 'date',
             type: new GraphQLNonNull(GraphQLString)
+        },
+        isPassed: {
+            name: 'isPassed',
+            type: new GraphQLNonNull(GraphQLBoolean)
+        },
+        isCredit: {
+            name: 'isCredit',
+            type: new GraphQLNonNull(GraphQLBoolean)
         }
     },
     resolve: async function (root, params) {
@@ -46,6 +54,14 @@ const updateOperation = {
         date: {
             name: 'date',
             type: GraphQLString
+        },
+        isPassed: {
+            name: 'isPassed',
+            type: GraphQLBoolean
+        },
+        isCredit: {
+            name: 'isCredit',
+            type: GraphQLBoolean
         }
     },
     resolve: async function (root, param) {
@@ -58,6 +74,12 @@ const updateOperation = {
         }
         if (param.date) {
             updateOperation.date = param.date
+        }
+        if (param.isPassed) {
+            updateOperation.isPassed = param.isPassed
+        }
+        if (param.isCredit) {
+            updateOperation.isCredit = param.isCredit
         }
         const Operation = await Operation.findByIdAndUpdate(param._id, updateOperation, { new: true })
         if (!Operation) {
