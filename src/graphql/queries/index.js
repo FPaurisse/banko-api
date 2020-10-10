@@ -1,19 +1,33 @@
 const { GraphQLList, GraphQLObjectType, GraphQLString } = require('graphql');
+const moment = require('moment');
 const Operation = require('../../models/Operation')
 const OperationType = require('./OperationType')
 
 const QueryRootType = new GraphQLObjectType ({
     name: 'AppSchema',
     fields: () => ({
-        operations: {
+        operationsByPeriod: {
             type: new GraphQLList(OperationType),
             args: {
                 month: {type: GraphQLString},
                 year: {type: GraphQLString}
             },
             resolve: async (_, { month, year }) => {
-                const operations = await Operation.find({ date: { "$regex": `${year}-${month}` } }).sort({'date': -1})
-                return operations;
+                const operations = await Operation.find({}).sort({ 'date': -1 })
+                const operationsByPeriod = operations.filter(x => moment(x.date).format('MM') === month && moment(x.date).format('YYYY') === year)
+                return operationsByPeriod;
+            }
+        },
+        operationsToCalculate: {
+            type: new GraphQLList(OperationType),
+            args: {
+                month: {type: GraphQLString},
+                year: {type: GraphQLString}
+            },
+            resolve: async (_, { month, year }) => {
+                const operations = await Operation.find({})
+                const operationsToCalculate = operations.filter(x => moment(x.date).format('MM') <= month && moment(x.date).format('YYYY') <= year)
+                return operationsToCalculate;
             }
         },
     })
