@@ -45,47 +45,32 @@ const updateOperation = {
         },
         title: {
             name: 'title',
-            type: GraphQLString
+            type: new GraphQLNonNull(GraphQLString)
         },
         amount: {
             name: 'amount',
-            type: GraphQLString
+            type: new GraphQLNonNull(GraphQLString)
         },
         date: {
             name: 'date',
-            type: GraphQLString
+            type: new GraphQLNonNull(GraphQLString)
         },
         isPassed: {
             name: 'isPassed',
-            type: GraphQLBoolean
+            type: new GraphQLNonNull(GraphQLBoolean)
         },
         isCredit: {
             name: 'isCredit',
-            type: GraphQLBoolean
+            type: new GraphQLNonNull(GraphQLBoolean)
         }
     },
     resolve: async function (root, param) {
-        let updateOperation = {};
-        if (param.title) {
-            updateOperation.name = param.title
-        }
-        if (param.amount) {
-            updateOperation.amount = param.amount
-        }
-        if (param.date) {
-            updateOperation.date = param.date
-        }
-        if (param.isPassed) {
-            updateOperation.isPassed = param.isPassed
-        }
-        if (param.isCredit) {
-            updateOperation.isCredit = param.isCredit
-        }
-        const Operation = await Operation.findByIdAndUpdate(param._id, updateOperation, { new: true })
-        if (!Operation) {
+        const { _id, ...rest } = param;
+        const operation = await Operation.findByIdAndUpdate(_id, rest, { new: true });
+        if (!operation) {
             throw new Error('Error')
         }
-        return Operation
+        return operation;
     }
 };
 
@@ -98,11 +83,11 @@ const removeOperation = {
         }
     },
     resolve: async function (root, param) {
-        const removeOperation = await Operation.findByIdAndRemove(param._id)
-        if (!removeOperation) {
+        const operation = await Operation.findByIdAndRemove(param._id)
+        if (!operation) {
             throw new Error('Error');
         }
-        return removeOperation
+        return operation
     }
 };
 
