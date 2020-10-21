@@ -37,7 +37,7 @@ const QueryRootType = new GraphQLObjectType ({
             },
             resolve: async (_, { month, year }) => {
                 const operations = await Operation.find({})
-                const operationsToCalculate = operations.filter(x => (moment(x.date).format('MM') <= month) && (moment(x.date).format('YYYY') <= year));
+                const operationsToCalculate = operations.filter(x => (moment(x.date).isBefore(moment(new Date(year, month)).format('YYYY-MM-DD'))));
                 return operationsToCalculate;
             }
         },
