@@ -14,19 +14,8 @@ const QueryRootType = new GraphQLObjectType ({
             },
             resolve: async (_, { month, year }) => {
                 const operations = await Operation.find({}).sort({ 'date': -1 })
-                const operationsByPeriod = operations.filter(x => moment(x.date).format('MM') === month && moment(x.date).format('YYYY') === year)
+                const operationsByPeriod = operations.filter(x => moment(x.date).format('MM') === month && moment(x.date).format('YYYY') === year);
                 return operationsByPeriod;
-            }
-        },
-        operationById: {
-            type: OperationType,
-            args: {
-                _id: {type: GraphQLString}
-            },
-            resolve: async (_, { _id }) => {
-                const operationById = await Operation.findById(_id);
-                operationById.amount = operationById.amount.replace('-', '')
-                return operationById;
             }
         },
         operationsToCalculate: {
