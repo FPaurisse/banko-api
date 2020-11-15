@@ -1,12 +1,11 @@
-const express = require('express');
-const expressGraphQL = require('express-graphql');
-var cors = require('cors')
-
-const schema = require('./src/graphql/schema');
+const { GraphQLServer } = require('graphql-yoga');
 const mongoose = require('mongoose');
-const database = require('./config/database');
+const cors = require('cors')
+const { PubSub } = require('graphql-yoga')
 
-const port = 3001;
+const models = require('./src/models');
+const database = require('./config/database');
+const { query, mutation, subscription } = require('./src/graphql/resolvers');
 
 mongoose.Promise = global.Promise;
 mongoose.connect(
@@ -19,15 +18,32 @@ mongoose.connect(
     }
 );
 
-const app = express();
+const resolvers = {
+    Query: {
+        ...query
+    },
+    Mutation: {
+        ...mutation
+    },
+    Subscription: {
+        ...subscription
+    }
+};
 
-app.use(cors())
+const pubsub = new PubSub();
 
-app.use('/', expressGraphQL.graphqlHTTP({
-    schema: schema,
-    graphiql: true
-}));
-
-app.listen(port, () => {
-    console.log('server running at port', port)
+const server = new GraphQLServer({
+    typeDefs: './src/graphql/schema.graphql',
+    resolvers,
+    context: request => {
+      return {
+        ...request,
+        models,
+        pubsub
+      }
+    }
 });
+
+server.use(cors());
+
+server.start({ port: 3001 }, () => console.log(`Server is running on http://localhost:3001`));

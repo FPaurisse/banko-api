@@ -1,0 +1,77 @@
+# OPERATION
+
+type Query {
+    getOperation(_id: ID!): Operation
+    getOperationsByPeriod(month: String!, year: String!): [Operation!]!
+    getOperationsToCalculate(month: String!, year: String!): [Operation!]!
+}
+
+type Mutation {
+    createOperation(
+        title: String!,
+        amount: String!,
+        date: String!,
+        isPassed: Boolean!,
+        isCredit: Boolean!,
+        user: ID
+    ): Operation!
+    
+    updateOperation(
+        _id: ID!, 
+        title: String,
+        amount: String,
+        date: String,
+        isPassed: Boolean,
+        isCredit: Boolean
+    ): Operation
+    
+    deleteOperation(
+        _id: ID!,
+    ): Operation
+}
+
+type Subscription {
+    newOperation: Operation
+}
+
+type Operation {
+    _id: ID!
+    title: String!,
+    amount: String!,
+    date: String!,
+    isPassed: Boolean!,
+    isCredit: Boolean!,
+    user: User
+}
+
+# USER 
+
+type Query {
+    getUser: User
+}
+
+type Mutation {
+    signup(
+        name: String!,
+        email: String!,
+        password: String!
+    ): AuthPayload
+
+    login(
+        email: String!,
+        password: String!
+    ): AuthPayload
+}
+
+type User {
+    _id: ID!
+    name: String!,
+    email: String!,
+    password: String!,
+    operations: [Operation]
+}
+
+type AuthPayload {
+  token: String,
+  user: User
+}
