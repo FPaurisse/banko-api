@@ -22,6 +22,20 @@ const updateOperation = async (parent, args, context) => {
     return operation;
 };
 
+const updateOperations = async (parent, args, context) => {
+    getUserId(context)
+    const { selected, ...rest } = args;
+    const { models } = context;
+    const operation = await models.Operation.updateMany({ _id: { $in: selected } }, { ...rest });
+    if (!operation) {
+        throw new Error('Update error');
+    }
+    return {
+        selected: selected,
+        ...rest
+    }
+};
+
 const deleteOperation = async (parent, args, context) => {
     getUserId(context)
     const { _id } = args;
@@ -35,6 +49,19 @@ const deleteOperation = async (parent, args, context) => {
     }
 };
 
+const deleteOperations = async (parent, args, context) => {
+    getUserId(context)
+    const { selected } = args;
+    const { models } = context;
+    const operation = await models.Operation.deleteMany({ _id: { $in: selected } });
+    if (!operation) {
+        throw new Error('Delete error');
+    }
+    return {
+        selected: selected
+    }
+};
+
 module.exports = { 
-    createOperation, updateOperation, deleteOperation
+    createOperation, updateOperation, deleteOperation, deleteOperations, updateOperations
 }

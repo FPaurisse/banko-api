@@ -24,9 +24,18 @@ type Mutation {
         isPassed: Boolean,
         isCredit: Boolean
     ): Operation
+
+    updateOperations(
+        selected: [ID!]!,
+        isPassed: Boolean
+    ): Operation
     
     deleteOperation(
         _id: ID!,
+    ): Operation
+
+    deleteOperations(
+        selected: [ID!]!
     ): Operation
 }
 
@@ -36,6 +45,7 @@ type Subscription {
 
 type Operation {
     _id: ID!
+    selected: [ID],
     title: String!,
     amount: String!,
     date: String!,
