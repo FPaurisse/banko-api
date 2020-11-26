@@ -1,11 +1,20 @@
-const { GraphQLServer } = require('graphql-yoga');
-const mongoose = require('mongoose');
-const cors = require('cors')
-const { PubSub } = require('graphql-yoga')
+const { ApolloServer } = require('apollo-server-express');
 
+const { importSchema } = require('graphql-import');
+
+const express = require('express');
+
+const mongoose = require('mongoose');
+
+const { KeycloakSchemaDirectives, KeycloakContext, KeycloakTypeDefs } = require('keycloak-connect-graphql');
+
+const cors = require('cors');
+
+const typeDefs = importSchema('./src/graphql/schema.graphql');
 const models = require('./src/models');
 const database = require('./config/database');
 const { query, mutation, subscription } = require('./src/graphql/resolvers');
+const { configureKeycloak } = require('./lib/common');
 
 mongoose.Promise = global.Promise;
 mongoose.connect(
@@ -30,20 +39,31 @@ const resolvers = {
     }
 };
 
-const pubsub = new PubSub();
+const app = express()
 
-const server = new GraphQLServer({
-    typeDefs: './src/graphql/schema.graphql',
+app.use(cors());
+
+const graphqlPath = '/graphql'
+
+// perform the standard keycloak-connect middleware setup on our app
+const { keycloak } = configureKeycloak(app, graphqlPath)
+
+const server = new ApolloServer({
+    typeDefs: [KeycloakTypeDefs, typeDefs],
+    schemaDirectives: KeycloakSchemaDirectives,
     resolvers,
-    context: request => {
+    context: ({req}) => {
       return {
-        ...request,
         models,
-        pubsub
+        kauth: new KeycloakContext({ req })
       }
     }
 });
 
-server.use(cors());
+server.applyMiddleware({ app })
 
-server.start({ port: 3001 }, () => console.log(`Server is running on http://localhost:3001`));
+const port = 3001;
+
+app.listen({ port }, () => {
+    console.log(`🚀 Server ready at http://localhost:${port}${server.graphqlPath}`)
+});

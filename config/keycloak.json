@@ -1,0 +1,9 @@
+{
+    "realm": "banko-admin",
+    "auth-server-url": "http://localhost:8080/auth/",
+    "ssl-required": "none",
+    "resource": "banko-client",
+    "public-client": true,
+    "confidential-port": 0,
+    "use-resource-role-mappings": true
+}

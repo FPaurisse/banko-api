@@ -8,10 +8,7 @@ const operationSchema = new Schema({
     date: { type: String, required: true },
     isPassed: { type: Boolean, required: true },
     isCredit: { type: Boolean, required: true },
-    user: {
-            type: Schema.Types.ObjectId,
-            ref: 'User'
-        }
+    userId: { type: String, required: true }
     },
     {
         timestamps: true

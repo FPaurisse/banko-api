@@ -1,5 +1,3 @@
-# OPERATION
-
 type Query {
     getOperation(_id: ID!): Operation
     getOperationsByPeriod(month: String!, year: String!): [Operation!]!
@@ -13,7 +11,7 @@ type Mutation {
         date: String!,
         isPassed: Boolean!,
         isCredit: Boolean!,
-        user: ID
+        userId: String
     ): Operation!
     
     updateOperation(
@@ -51,37 +49,5 @@ type Operation {
     date: String!,
     isPassed: Boolean!,
     isCredit: Boolean!,
-    user: User
-}
-
-# USER 
-
-type Query {
-    getUser: User
-}
-
-type Mutation {
-    signup(
-        name: String!,
-        email: String!,
-        password: String!
-    ): AuthPayload
-
-    login(
-        email: String!,
-        password: String!
-    ): AuthPayload
-}
-
-type User {
-    _id: ID!
-    name: String!,
-    email: String!,
-    password: String!,
-    operations: [Operation]
-}
-
-type AuthPayload {
-  token: String,
-  user: User
+    userId: String!
 }
