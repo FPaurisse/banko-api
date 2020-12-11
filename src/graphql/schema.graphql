@@ -1,22 +1,62 @@
+
+# ACCOUNT
+type Query {
+    getAccount(_id: ID!): Account
+    getAccountsByUser(userId: String!): [Account!]!
+}
+
+type Mutation {
+    createAccount(
+        title: String!,
+        isDefault: Boolean!,
+        userId: String!
+    ): Account
+    
+    updateAccount(
+        _id: ID!, 
+        title: String!,
+        isDefault: Boolean!
+    ): Account
+    
+    deleteAccount(
+        _id: ID!, 
+    ): Account
+
+    deleteAccounts: Account
+}
+
+type Account {
+    _id: ID!
+    title: String!,
+    userId: ID!,
+    guests: [ID!],
+    isDefault: Boolean
+}
+
+
+# OPERATION
 type Query {
     getOperation(_id: ID!): Operation
-    getOperationsByPeriod(month: String!, year: String!): [Operation!]!
-    getOperationsToCalculate(month: String!, year: String!): [Operation!]!
+    getOperationsByPeriod(month: String!, year: String!, accountId: String!): [Operation!]!
+    getOperationsToCalculate(month: String!, year: String!, accountId: String!): [Operation!]!
 }
 
 type Mutation {
     createOperation(
         title: String!,
         amount: String!,
+        categories: [String!]!,
         date: String!,
         isPassed: Boolean!,
         isCredit: Boolean!,
-        userId: String
-    ): Operation!
+        accountId: String!,
+        userId: String!
+    ): Operation
     
     updateOperation(
         _id: ID!, 
         title: String,
+        categories: [String!],
         amount: String,
         date: String,
         isPassed: Boolean,
@@ -26,7 +66,7 @@ type Mutation {
     updateOperations(
         selected: [ID!]!,
         isPassed: Boolean
-    ): Operation
+    ): [Operation]
     
     deleteOperation(
         _id: ID!,
@@ -37,17 +77,15 @@ type Mutation {
     ): Operation
 }
 
-type Subscription {
-    newOperation: Operation
-}
-
 type Operation {
     _id: ID!
     selected: [ID],
     title: String!,
+    categories: [String!]!,
     amount: String!,
     date: String!,
     isPassed: Boolean!,
     isCredit: Boolean!,
+    accountId: String!,
     userId: String!
 }

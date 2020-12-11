@@ -1,22 +1,22 @@
 require('dotenv').config();
 
-const { ApolloServer } = require('apollo-server-express');
+const {
+    KeycloakSchemaDirectives,
+    KeycloakTypeDefs,
+    KeycloakContext
+}                           = require('keycloak-connect-graphql');
+const { ApolloServer }      = require('apollo-server-express');
+const { importSchema }      = require('graphql-import');
+const mongoose              = require('mongoose');
+const express               = require('express');
+const cors                  = require('cors');
 
-const { importSchema } = require('graphql-import');
+const { configureKeycloak } = require('./auth/keycloak');
+const { query, mutation }   = require('./src/graphql/resolvers');
+const database              = require('./config/database');
+const models                = require('./src/models');
 
-const express = require('express');
-
-const mongoose = require('mongoose');
-
-const { KeycloakSchemaDirectives, KeycloakContext, KeycloakTypeDefs } = require('keycloak-connect-graphql');
-
-const cors = require('cors');
-
-const typeDefs = importSchema('./src/graphql/schema.graphql');
-const models = require('./src/models');
-const database = require('./config/database');
-const { query, mutation, subscription } = require('./src/graphql/resolvers');
-const { configureKeycloak } = require('./lib/common');
+const typeDefs              = importSchema('./src/graphql/schema.graphql');
 
 mongoose.Promise = global.Promise;
 mongoose.connect(
@@ -35,9 +35,6 @@ const resolvers = {
     },
     Mutation: {
         ...mutation
-    },
-    Subscription: {
-        ...subscription
     }
 };
 
@@ -48,7 +45,7 @@ app.use(cors());
 const graphqlPath = '/graphql'
 
 // perform the standard keycloak-connect middleware setup on our app
-const { keycloak } = configureKeycloak(app, graphqlPath)
+configureKeycloak(app, graphqlPath);
 
 const server = new ApolloServer({
     typeDefs: [KeycloakTypeDefs, typeDefs],

@@ -1,9 +1,9 @@
 const Operation = require('./Operation');
-const User = require('./User');
+const Account = require('./Account');
 
 const models = {
-    Operation, 
-    User
+    Operation,
+    Account
 }
 
 module.exports = models;

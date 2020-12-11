@@ -1,17 +1,17 @@
 const moment = require('moment');
 
 const getOperationsByPeriod = async (parent, args, context) => {
-    const { month, year } = args;
-    const { models, kauth } = context;
-    const operations = await models.Operation.find({ userId: kauth.accessToken.content.sub }).sort({ 'date': -1 });
+    const { month, year, accountId } = args;
+    const { models } = context;
+    const operations = await models.Operation.find({ accountId }).sort({ 'date': -1 });
     const operationsByPeriod = operations.filter(x => moment(new Date(x.date)).format('MM') === month && moment(new Date(x.date)).format('YYYY') === year);
     return operationsByPeriod;
 };
 
 const getOperationsToCalculate = async (parent, args, context) => {
-    const { month, year } = args;
+    const { month, year, accountId } = args;
     const { models, kauth } = context;
-    const operations = await models.Operation.find({ userId: kauth.accessToken.content.sub });
+    const operations = await models.Operation.find({ accountId });
     const operationsToCalculate = operations.filter(x => (moment(new Date(x.date)).isBefore(moment(new Date(year, month)).format('YYYY-MM-DD'))));
     return operationsToCalculate;
 };

@@ -3,12 +3,14 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const operationSchema = new Schema({
-    title: { type: String, required: true },
-    amount: { type: String, required: true },
-    date: { type: String, required: true },
-    isPassed: { type: Boolean, required: true },
-    isCredit: { type: Boolean, required: true },
-    userId: { type: String, required: true }
+        title: { type: String, required: true },
+        categories: { type: Array, required: true },
+        amount: { type: String, required: true },
+        date: { type: String, required: true },
+        isPassed: { type: Boolean, required: true },
+        isCredit: { type: Boolean, required: true },
+        userId: { type: String, required: true },
+        accountId: { type: String, required: true }
     },
     {
         timestamps: true

@@ -1,6 +1,6 @@
 const createOperation = async (parent, args, context) => {
     const { models, kauth } = context;
-    const newOperation = await models.Operation.create({ userId: kauth.accessToken.content.sub, ...args });
+    const newOperation = await models.Operation.create({ ...args });
     if (!newOperation) {
         throw new Error('Create error');
     }
