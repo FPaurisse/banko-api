@@ -23,23 +23,21 @@ const updateAccount = async (parent, args, context) => {
             throw new Error('Update error');
         }
     }
-    const Account = await models.Account.findByIdAndUpdate(_id, { isDefault, ...rest }, { new: true });
-    if (!Account) {
+    const account = await models.Account.findByIdAndUpdate(_id, { isDefault, ...rest }, { new: true });
+    if (!account) {
         throw new Error('Update error');
     }
-    return Account;
+    return account;
 };
 
 const deleteAccount = async (parent, args, context) => {
     const { _id } = args;
     const { models } = context;
-    const Account = await models.Account.findByIdAndRemove(_id);
-    if (!Account) {
+    const account = await models.Account.findByIdAndRemove(_id);
+    if (!account) {
         throw new Error('Delete error');
     }
-    return {
-        _id: Account._id
-    }
+    return account
 };
 
 const deleteAccounts = async (parent, args, context) => {

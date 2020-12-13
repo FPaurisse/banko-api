@@ -1,4 +1,36 @@
 
+# CATEGORY
+type Query {
+    getCategory(_id: ID!): Category
+    getCategoriesByAccount(accountId: String!): [Category!]!
+}
+
+type Mutation {
+    createCategory(
+        title: String!,
+        accountId: String!,
+        userId: String!
+    ): Category
+    
+    updateCategory(
+        _id: ID!, 
+        title: String!
+    ): Category
+    
+    deleteCategory(
+        _id: ID!, 
+    ): Category
+
+    deleteCategories: Category
+}
+
+type Category {
+    _id: ID!
+    title: String!,
+    accountId: ID!,
+    userId: ID!
+}
+
 # ACCOUNT
 type Query {
     getAccount(_id: ID!): Account
@@ -66,7 +98,7 @@ type Mutation {
     updateOperations(
         selected: [ID!]!,
         isPassed: Boolean
-    ): [Operation]
+    ): Operation
     
     deleteOperation(
         _id: ID!,

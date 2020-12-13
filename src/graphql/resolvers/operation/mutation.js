@@ -18,16 +18,13 @@ const updateOperation = async (parent, args, context) => {
 };
 
 const updateOperations = async (parent, args, context) => {
-    const { selected, ...rest } = args;
+    const { selected, isPassed } = args;
     const { models } = context;
-    const operation = await models.Operation.updateMany({ _id: { $in: selected } }, { ...rest });
-    if (!operation) {
+    const operations = await models.Operation.updateMany({ _id: { $in: selected } }, { isPassed });
+    if (!operations) {
         throw new Error('Update error');
     }
-    return {
-        selected: selected,
-        ...rest
-    }
+    return { selected }
 };
 
 const deleteOperation = async (parent, args, context) => {
