@@ -2,33 +2,49 @@ type Mutation {
     reset: Boolean
 }
 
-# SETTING
+# PROFIL
 type Query {
-    getSettingByUser(userId: String!): Setting
+    getProfileByUserId(userId: String!): Profile
+    getAllSharedProfiles(userId: String!): [Profile!]
 }
 
 type Mutation {
-    createSetting(
+    createProfile(
         userId: String!,
-        accountIdByDefault: String
-    ): Setting
+        accountIdByDefault: String,
+        shareMyProfile: Boolean,
+        email: String,
+        username: String,
+        firstname: String,
+        lastname: String
+    ): Profile
     
-    updateSetting(
+    updateProfile(
         userId: String!,
-        accountIdByDefault: String
-    ): Setting
+        accountIdByDefault: String,
+        shareMyProfile: Boolean,
+        email: String,
+        username: String,
+        firstname: String,
+        lastname: String
+    ): Profile
     
-    deleteSetting(
+    deleteProfile(
         userId: String!, 
-    ): Setting
+    ): Profile
 
-    deleteAllSettings: Boolean
+    deleteAllProfiles: Boolean
 }
 
-type Setting {
+type Profile {
     _id: ID!
     userId: String!,
-    accountIdByDefault: String!
+    accountIdByDefault: String!,
+    shareMyProfile: Boolean!,
+    email: String!,
+    username: String!,
+    firstname: String!,
+    lastname: String!
 }
 
 # CATEGORY
@@ -72,12 +88,14 @@ type Query {
 type Mutation {
     createAccount(
         title: String!,
-        userId: String!
+        userId: String!,
+        guests: [String!],
     ): Account
     
     updateAccount(
         _id: ID!, 
-        title: String!
+        title: String!,
+        guests: [String!],
     ): Account
     
     deleteAccount(
@@ -90,6 +108,7 @@ type Mutation {
 type Account {
     _id: ID!
     title: String!,
+    guests: [String!]!,
     userId: ID!
 }
 
@@ -149,157 +168,4 @@ type Operation {
     isCredit: Boolean!,
     accountId: String!,
     userId: String!
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# PROFILE 
-
-
-
-type OperationBis {
-    _id: ID,
-    selected: [ID!],
-    title: String,
-    categories: [String!],
-    amount: String,
-    date: String,
-    isPassed: Boolean,
-    isCredit: Boolean,
-    accountId: String
-}
-
-type CategoryBis {
-    _id: ID,
-    title: String
-}
-
-type GuestBis {
-    _id: ID,
-    email: String
-}
-
-type AccountBis {
-    _id: ID,
-    title: String,
-    operations: [OperationBis!],
-    categories: [CategoryBis!],
-    guests: [GuestBis]
-}
-
-type SettingsBis {
-    _id: ID,
-    primaryAccount: String,
-    shareMyProfile: Boolean
-}
-
-type Profile {
-    _id: ID!,
-    keycloakId: String,
-    firstname: String,
-    lastname: String,
-    fullname: String,
-    username: String,
-    email: String,
-    isConfirmed: Boolean,
-    settings: SettingsBis,
-    accounts: [AccountBis!]
-}
-
-type Query {
-    getProfile(_id: ID!): Profile
-}
-
-type Mutation {
-    createProfile(
-        keycloakId: String,
-        firstname: String,
-        lastname: String,
-        fullname: String,
-        username: String,
-        email: String,
-        isConfirmed: Boolean
-    ): Profile
-
-    createAccountBis(
-        profileId: ID!,
-        title: String
-    ): Profile
-
-    updateAccountBis(
-        profileId: ID!,
-        accountId: ID!,
-        title: String
-    ): Profile
-
-    deleteAccountBis(
-        profileId: ID!,
-        accountId: ID!
-    ): Profile
-
-    createOperationBis(
-        profileId: ID!,
-        accountId: ID!,
-        title: String!,
-        amount: String!
-    ): Profile
-
-    updateOperationBis(
-        profileId: ID!,
-        accountId: ID!,
-        operationId: ID!,
-        title: String,
-        amount: String
-    ): Profile
-
-    deleteOperationBis(
-        profileId: ID!,
-        accountId: ID!,
-        operationId: ID!
-    ): Profile
-
-    updateProfile(
-        _id: ID!,
-        keycloakId: String,
-        firstname: String,
-        lastname: String,
-        fullname: String,
-        username: String,
-        email: String,
-        isConfirmed: Boolean
-    ): Profile
-
-    deleteProfile(
-        _id: ID!
-    ): Profile
 }

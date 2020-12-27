@@ -31,9 +31,6 @@ const deleteAccount = async (parent, args, context) => {
     await models.Category.deleteMany(
         { accountId: _id }
     );
-    await models.Setting.deleteMany(
-        { accountId: _id }
-    );
     return account
 };
 

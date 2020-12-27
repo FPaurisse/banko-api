@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 
 const accountSchema = new Schema({
         title: { type: String, required: true },
-        userId: { type: String, required: true }
+        userId: { type: String, required: true },
+        guests: { type: Array, required: true }
     },
     {
         timestamps: true

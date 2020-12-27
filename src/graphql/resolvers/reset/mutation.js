@@ -3,7 +3,7 @@ const reset = async (parent, args, context) => {
     try {
         await models.Account.deleteMany();
         await models.Operation.deleteMany();
-        await models.Setting.deleteMany();
+        await models.Profile.deleteMany();
         await models.Category.deleteMany();
         return true
     } catch (error) {

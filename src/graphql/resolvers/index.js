@@ -7,16 +7,13 @@ const categoryMutation = require('./category/mutation');
 const accountQuery = require('./account/query');
 const accountMutation = require('./account/mutation');
 
-const settingQuery = require('./setting/query');
-const settingMutation = require('./setting/mutation');
-
 const profileQuery = require('./profile/query');
 const profileMutation = require('./profile/mutation');
 
 const reset = require('./reset/mutation');
 
-const query = { ...operationQuery, ...categoryQuery, ...accountQuery, ...settingQuery, ...profileQuery };
-const mutation = { ...operationMutation, ...categoryMutation, ...accountMutation, ...settingMutation, ...profileMutation, ...reset };
+const query = { ...operationQuery, ...categoryQuery, ...accountQuery, ...profileQuery };
+const mutation = { ...operationMutation, ...categoryMutation, ...accountMutation, ...profileMutation, ...reset };
 
 module.exports = { 
     query, mutation
