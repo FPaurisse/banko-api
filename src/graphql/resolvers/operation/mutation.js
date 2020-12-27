@@ -17,7 +17,7 @@ const updateOperation = async (parent, args, context) => {
     return operation;
 };
 
-const updateOperations = async (parent, args, context) => {
+const updateSelectedOperations = async (parent, args, context) => {
     const { selected, isPassed } = args;
     const { models } = context;
     const operations = await models.Operation.updateMany({ _id: { $in: selected } }, { isPassed });
@@ -39,7 +39,7 @@ const deleteOperation = async (parent, args, context) => {
     }
 };
 
-const deleteOperations = async (parent, args, context) => {
+const deleteSelectedOperations = async (parent, args, context) => {
     const { selected } = args;
     const { models } = context;
     const operation = await models.Operation.deleteMany({ _id: { $in: selected } });
@@ -51,6 +51,15 @@ const deleteOperations = async (parent, args, context) => {
     }
 };
 
+const deleteAllOperations = async (parent, args, context) => {
+    const { models } = context;
+    const operations = await models.Operation.deleteMany();
+    if (!operations) {
+        throw new Error('Delete error');
+    }
+    return true
+};
+
 module.exports = { 
-    createOperation, updateOperation, deleteOperation, deleteOperations, updateOperations
+    createOperation, updateOperation, updateSelectedOperations, deleteOperation, deleteSelectedOperations, deleteAllOperations
 }

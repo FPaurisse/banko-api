@@ -1,3 +1,35 @@
+type Mutation {
+    reset: Boolean
+}
+
+# SETTING
+type Query {
+    getSettingByUser(userId: String!): Setting
+}
+
+type Mutation {
+    createSetting(
+        userId: String!,
+        accountIdByDefault: String
+    ): Setting
+    
+    updateSetting(
+        userId: String!,
+        accountIdByDefault: String
+    ): Setting
+    
+    deleteSetting(
+        userId: String!, 
+    ): Setting
+
+    deleteAllSettings: Boolean
+}
+
+type Setting {
+    _id: ID!
+    userId: String!,
+    accountIdByDefault: String!
+}
 
 # CATEGORY
 type Query {
@@ -21,7 +53,7 @@ type Mutation {
         _id: ID!, 
     ): Category
 
-    deleteCategories: Category
+    deleteAllCategories: Boolean
 }
 
 type Category {
@@ -40,31 +72,26 @@ type Query {
 type Mutation {
     createAccount(
         title: String!,
-        isDefault: Boolean!,
         userId: String!
     ): Account
     
     updateAccount(
         _id: ID!, 
-        title: String!,
-        isDefault: Boolean!
+        title: String!
     ): Account
     
     deleteAccount(
         _id: ID!, 
     ): Account
 
-    deleteAccounts: Account
+    deleteAllAccounts: Boolean
 }
 
 type Account {
     _id: ID!
     title: String!,
-    userId: ID!,
-    guests: [ID!],
-    isDefault: Boolean
+    userId: ID!
 }
-
 
 # OPERATION
 type Query {
@@ -95,7 +122,7 @@ type Mutation {
         isCredit: Boolean
     ): Operation
 
-    updateOperations(
+    updateSelectedOperations(
         selected: [ID!]!,
         isPassed: Boolean
     ): Operation
@@ -104,9 +131,11 @@ type Mutation {
         _id: ID!,
     ): Operation
 
-    deleteOperations(
+    deleteSelectedOperations(
         selected: [ID!]!
     ): Operation
+
+    deleteAllOperations: Boolean
 }
 
 type Operation {
@@ -120,4 +149,157 @@ type Operation {
     isCredit: Boolean!,
     accountId: String!,
     userId: String!
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# PROFILE 
+
+
+
+type OperationBis {
+    _id: ID,
+    selected: [ID!],
+    title: String,
+    categories: [String!],
+    amount: String,
+    date: String,
+    isPassed: Boolean,
+    isCredit: Boolean,
+    accountId: String
+}
+
+type CategoryBis {
+    _id: ID,
+    title: String
+}
+
+type GuestBis {
+    _id: ID,
+    email: String
+}
+
+type AccountBis {
+    _id: ID,
+    title: String,
+    operations: [OperationBis!],
+    categories: [CategoryBis!],
+    guests: [GuestBis]
+}
+
+type SettingsBis {
+    _id: ID,
+    primaryAccount: String,
+    shareMyProfile: Boolean
+}
+
+type Profile {
+    _id: ID!,
+    keycloakId: String,
+    firstname: String,
+    lastname: String,
+    fullname: String,
+    username: String,
+    email: String,
+    isConfirmed: Boolean,
+    settings: SettingsBis,
+    accounts: [AccountBis!]
+}
+
+type Query {
+    getProfile(_id: ID!): Profile
+}
+
+type Mutation {
+    createProfile(
+        keycloakId: String,
+        firstname: String,
+        lastname: String,
+        fullname: String,
+        username: String,
+        email: String,
+        isConfirmed: Boolean
+    ): Profile
+
+    createAccountBis(
+        profileId: ID!,
+        title: String
+    ): Profile
+
+    updateAccountBis(
+        profileId: ID!,
+        accountId: ID!,
+        title: String
+    ): Profile
+
+    deleteAccountBis(
+        profileId: ID!,
+        accountId: ID!
+    ): Profile
+
+    createOperationBis(
+        profileId: ID!,
+        accountId: ID!,
+        title: String!,
+        amount: String!
+    ): Profile
+
+    updateOperationBis(
+        profileId: ID!,
+        accountId: ID!,
+        operationId: ID!,
+        title: String,
+        amount: String
+    ): Profile
+
+    deleteOperationBis(
+        profileId: ID!,
+        accountId: ID!,
+        operationId: ID!
+    ): Profile
+
+    updateProfile(
+        _id: ID!,
+        keycloakId: String,
+        firstname: String,
+        lastname: String,
+        fullname: String,
+        username: String,
+        email: String,
+        isConfirmed: Boolean
+    ): Profile
+
+    deleteProfile(
+        _id: ID!
+    ): Profile
 }

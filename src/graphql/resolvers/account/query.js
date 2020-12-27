@@ -1,6 +1,6 @@
 const getAccountsByUser = async (parent, args, context) => {
     const { userId } = args;
-    const { models, kauth } = context;
+    const { models } = context;
     const accounts = await models.Account.find({ userId });
     return accounts;
 };

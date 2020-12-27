@@ -1,13 +1,7 @@
 const createAccount = async (parent, args, context) => {
-    const { isDefault, ...rest } = args;
+    const { ...rest } = args;
     const { models } = context;
-    if (isDefault) {
-        const accounts = await models.Account.updateMany({isDefault: true}, {$set:{isDefault: false}});
-        if (!accounts) {
-            throw new Error('Update error');
-        }
-    }
-    const newAccount = await models.Account.create({ isDefault, ...rest });
+    const newAccount = await models.Account.create({ ...rest });
     if (!newAccount) {
         throw new Error('Create error');
     }
@@ -15,15 +9,9 @@ const createAccount = async (parent, args, context) => {
 };
 
 const updateAccount = async (parent, args, context) => {
-    const { _id, isDefault, ...rest } = args;
+    const { _id, ...rest } = args;
     const { models } = context;
-    if (isDefault) {
-        const accounts = await models.Account.updateMany({isDefault: true}, {$set:{isDefault: false}});
-        if (!accounts) {
-            throw new Error('Update error');
-        }
-    }
-    const account = await models.Account.findByIdAndUpdate(_id, { isDefault, ...rest }, { new: true });
+    const account = await models.Account.findByIdAndUpdate(_id, { ...rest }, { new: true });
     if (!account) {
         throw new Error('Update error');
     }
@@ -37,18 +25,27 @@ const deleteAccount = async (parent, args, context) => {
     if (!account) {
         throw new Error('Delete error');
     }
+    await models.Operation.deleteMany(
+        { accountId: _id }
+    );
+    await models.Category.deleteMany(
+        { accountId: _id }
+    );
+    await models.Setting.deleteMany(
+        { accountId: _id }
+    );
     return account
 };
 
-const deleteAccounts = async (parent, args, context) => {
+const deleteAllAccounts = async (parent, args, context) => {
     const { models } = context;
-    const accounts   = await models.Account.deleteMany();
-    await models.Operations.deleteMany();
+    const accounts = await models.Account.deleteMany();
     if (!accounts) {
         throw new Error('Delete error');
     }
+    return true
 };
 
 module.exports = { 
-    createAccount, updateAccount, deleteAccount, deleteAccounts
+    createAccount, updateAccount, deleteAccount, deleteAllAccounts
 }

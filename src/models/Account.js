@@ -4,9 +4,7 @@ const Schema = mongoose.Schema;
 
 const accountSchema = new Schema({
         title: { type: String, required: true },
-        userId: { type: String, required: true },
-        isDefault: { type: Boolean, required: true },
-        guests: { type: Array }
+        userId: { type: String, required: true }
     },
     {
         timestamps: true

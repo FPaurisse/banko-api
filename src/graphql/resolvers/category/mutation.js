@@ -25,17 +25,25 @@ const deleteCategory = async (parent, args, context) => {
     if (!category) {
         throw new Error('Delete error');
     }
+    await models.Operation.updateMany(
+        { categories: _id },
+        { $pull: { categories: _id } }
+    )
     return category;
 };
 
-const deleteCategories = async (parent, args, context) => {
+const deleteAllCategories = async (parent, args, context) => {
     const { models } = context;
-    const categories   = await models.Category.deleteMany();
+    const categories = await models.Category.deleteMany();
     if (!categories) {
         throw new Error('Delete error');
     }
+    await models.Operation.updateMany(
+        {}, { $unset: { categories: [] } }
+    )
+    return true
 };
 
 module.exports = { 
-    createCategory, updateCategory, deleteCategory, deleteCategories
+    createCategory, updateCategory, deleteCategory, deleteAllCategories
 }
