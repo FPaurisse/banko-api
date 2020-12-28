@@ -109,6 +109,7 @@ type Account {
     _id: ID!
     title: String!,
     guests: [String!]!,
+    guestAccount: Boolean!,
     userId: ID!
 }
 
