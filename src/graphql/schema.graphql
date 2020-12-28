@@ -89,7 +89,7 @@ type Mutation {
     createAccount(
         title: String!,
         userId: String!,
-        guests: [String!],
+        guests: [String!]
     ): Account
     
     updateAccount(
@@ -109,7 +109,7 @@ type Account {
     _id: ID!
     title: String!,
     guests: [String!]!,
-    guestAccount: Boolean!,
+    guestAccount: Boolean,
     userId: ID!
 }
 
