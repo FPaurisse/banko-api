@@ -1,6 +1,13 @@
 const createOperation = async (parent, args, context) => {
     const { models, kauth } = context;
-    const newOperation = await models.Operation.create({ ...args });
+    const { isCredit, amount, ...rest } = args;
+    
+    let formattedAmount = amount;
+    if (!isCredit) {
+        formattedAmount = `-${amount}`;   
+    }
+
+    const newOperation = await models.Operation.create({ isCredit, amount: formattedAmount, ...rest });
     if (!newOperation) {
         throw new Error('Create error');
     }
@@ -8,9 +15,15 @@ const createOperation = async (parent, args, context) => {
 };
 
 const updateOperation = async (parent, args, context) => {
-    const { _id, ...rest } = args;
+    const { _id, isCredit, amount, ...rest } = args;
     const { models } = context;
-    const operation = await models.Operation.findByIdAndUpdate(_id, { ...rest }, { new: true });
+    
+    let formattedAmount = amount;
+    if (!isCredit) {
+        formattedAmount = `-${amount}`;   
+    }
+
+    const operation = await models.Operation.findByIdAndUpdate(_id, { isCredit, amount: formattedAmount, ...rest }, { new: true });
     if (!operation) {
         throw new Error('Update error');
     }
