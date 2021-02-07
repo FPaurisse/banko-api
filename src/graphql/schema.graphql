@@ -118,7 +118,6 @@ type Query {
     getOperation(_id: ID!): Operation
     getOperationsByPeriod(month: String!, year: String!, accountId: String!): [Operation!]!
     getOperationsToCalculate(month: String!, year: String!, accountId: String!): [Operation!]!
-    getSheduledOperations(accountId: String!): [Operation!]!
 }
 
 type Mutation {
@@ -130,8 +129,7 @@ type Mutation {
         isPassed: Boolean!,
         isCredit: Boolean!,
         accountId: String!,
-        userId: String!,
-        isSheduled: Boolean!
+        userId: String!
     ): Operation
     
     updateOperation(
@@ -141,14 +139,12 @@ type Mutation {
         amount: String,
         date: String,
         isPassed: Boolean,
-        isCredit: Boolean,
-        isSheduled: Boolean!
+        isCredit: Boolean
     ): Operation
 
     updateSelectedOperations(
         selected: [ID!]!,
-        isPassed: Boolean,
-        isSheduled: Boolean!
+        isPassed: Boolean
     ): Operation
     
     deleteOperation(
@@ -156,8 +152,7 @@ type Mutation {
     ): Operation
 
     deleteSelectedOperations(
-        selected: [ID!]!,
-        isSheduled: Boolean!
+        selected: [ID!]!
     ): Operation
 
     deleteAllOperations: Boolean
@@ -174,5 +169,4 @@ type Operation {
     isCredit: Boolean!,
     accountId: String!,
     userId: String!,
-    isSheduled: Boolean!
 }

@@ -10,8 +10,7 @@ const operationSchema = new Schema({
         date: { type: String, required: true },
         isPassed: { type: Boolean, required: true },
         isCredit: { type: Boolean, required: true },
-        categories: { type: Array, required: true },
-        isSheduled: { type: Boolean, required: true }
+        categories: { type: Array, required: true }
     },
     {
         timestamps: true
